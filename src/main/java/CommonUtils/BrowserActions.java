@@ -1,4 +1,4 @@
-package main;
+package CommonUtils;
 
 
 import org.openqa.selenium.By;
