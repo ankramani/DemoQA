@@ -3,6 +3,7 @@ package CommonUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,11 +14,17 @@ public class BrowserActions {
 
     public static WebDriver driver;
 
+    public static void launchBrowser(){
+        driver = new ChromeDriver();
+        System.setProperty("webdriver.chrome.driver", "./usr/bin/chromedriver");
+        driver.get("http://demoqa.com/");
+    }
+
     public static void clickElement(By by){
         driver.findElement(by).click();
     }
 
-    public static void enterText(String keys, By by){
+    public static void enterText(By by, String keys){
         driver.findElement(by).sendKeys(keys);
     }
 
@@ -32,6 +39,12 @@ public class BrowserActions {
         Actions action = new Actions(driver);
         action.dragAndDrop(driver.findElement(source), driver.findElement(dest));
         action.build();
+    }
+    public static void clearInputText(By by){
+        driver.findElement(by).clear();
+    }
+    public static void closeBrowser(){
+        driver.close();
     }
 
 }
