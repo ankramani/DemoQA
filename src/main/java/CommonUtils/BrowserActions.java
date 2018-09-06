@@ -1,49 +1,50 @@
 package CommonUtils;
 
-
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.concurrent.TimeUnit;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class BrowserActions {
+    static WebDriver driver;
+    static String url = "https://demoqa.com/";
 
-    public static WebDriver driver;
 
-    public static void launchBrowser(){
+    public void launchBrowser () {
         driver = new ChromeDriver();
-        System.setProperty("webdriver.chrome.driver", "./usr/bin/chromedriver");
-        driver.get("http://demoqa.com/");
+        driver.get(url);
     }
-
-    public static void clickElement(By by){
+    public void clickElement(By by){
         driver.findElement(by).click();
     }
+    public void enterText(By by, String text){
+        driver.findElement(by).sendKeys(text);
+    }
+    public void readDataFromExcel(int rownum, int cellnum) {
+        try {
 
-    public static void enterText(By by, String keys){
-        driver.findElement(by).sendKeys(keys);
+            FileInputStream fis = new FileInputStream("./src/main/resources/Test.xlsx");
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            Row row = sheet.getRow(rownum);
+            Cell cell = row.getCell(cellnum);
+            System.out.println(cell);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
-
-    public static void explicitWait(By by){
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-    public static void implicitWait(){
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
-    public static void dragAndDrop(By source, By dest){
-        Actions action = new Actions(driver);
-        action.dragAndDrop(driver.findElement(source), driver.findElement(dest));
-        action.build();
-    }
-    public static void clearInputText(By by){
-        driver.findElement(by).clear();
-    }
-    public static void closeBrowser(){
+    public void closeInstance(){
         driver.close();
     }
 
